@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>多益 900 分訓練器</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f6fa;--card:#fff;--tx:#1d2433;--mu:#6b7488;--pr:#2f5bea;--ok:#1a9b5b;--no:#d6403a;--bd:#dfe3ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151d;--card:#1b202c;--tx:#e8ebf3;--mu:#97a0b5;--pr:#6c8cff;--ok:#41c68a;--no:#ff7a73;--bd:#2c3345}}
+:root[data-theme="dark"]{--bg:#12151d;--card:#1b202c;--tx:#e8ebf3;--mu:#97a0b5;--pr:#6c8cff;--ok:#41c68a;--no:#ff7a73;--bd:#2c3345}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.3rem;margin:4px 0 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button,.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:999px;padding:7px 14px;font-size:.9rem;cursor:pointer}
+.tabs button.on,.btn.p{background:var(--pr);border-color:var(--pr);color:#fff}
+.bar{height:6px;background:var(--bd);border-radius:9px;overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;background:var(--pr);transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--mu);font-size:.85rem;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+.tag{display:inline-block;font-size:.75rem;color:var(--pr);border:1px solid var(--pr);border-radius:6px;padding:0 6px;margin-bottom:8px}
+.pass{white-space:pre-line;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:.95rem;overflow-x:auto}
+.q{font-weight:600;margin:0 0 10px}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:.98rem;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--pr)}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opt.no{border-color:var(--no);background:color-mix(in srgb,var(--no) 15%,transparent)}
+.aud{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.aud select{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:6px}
+.ex{border-left:4px solid var(--pr);padding:8px 12px;background:var(--bg);border-radius:6px;font-size:.92rem;margin-top:6px;white-space:pre-line}
+.row{display:flex;gap:8px;justify-content:space-between}
+.big{font-size:2.6rem;font-weight:700;text-align:center;color:var(--pr)}
+.hint{color:var(--mu);font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="w">
+<h1><span>🎧 多益 900 分訓練器</span><button class="btn" id="th">🌓</button></h1>
+<div class="tabs" id="tabs"></div>
+<div class="bar"><i id="pb"></i></div>
+<div class="meta"><span id="pi"></span><span id="sc"></span></div>
+<div id="main"></div>
+</div>
+<script>
+const p2=(q,a,b,c,n,e)=>({t:'L',p:'Part 2 應答問題',sc:[q,'A. '+a,'B. '+b,'C. '+c],qs:[{q:'請聽問句並選出最適當的回應',o:['A','B','C'],a:n,e}]});
+const D=[
+p2('Why was the quarterly report delayed?','It\'s due on the fifteenth.','Because the data from Singapore arrived late.','Yes, I\'ll send it to the printer.',1,'Why 問原因，B 以 Because 直接回答。A 回答時間、C 用 Yes 回答 Wh- 問句，皆不合。'),
+p2('Would you mind if I rescheduled our meeting to Thursday?','Not at all, Thursday works better for me.','The meeting room is on the third floor.','I didn\'t mind the weather.',0,'Would you mind 的禮貌回應用 Not at all 表示不介意。B、C 為字詞聯想陷阱（meeting / mind）。'),
+p2('Haven\'t the new hires received their security badges yet?','They\'re scheduled to be issued after orientation.','Yes, the badges are blue.','I\'d prefer a different hotel.',0,'否定問句詢問進度，A 說明預定在說明會後發放，間接表示尚未收到。B 的 Yes 語意矛盾。'),
+p2('Who\'s in charge of the client presentation next week?','At the conference center downtown.','Ms. Lin volunteered, I believe.','It lasted about an hour.',1,'Who 問人，B 提到 Ms. Lin。A 回答地點、C 回答時間長度。'),
+{t:'L',p:'Part 3 簡短對話',sc:['M: Hi Karen, I noticed the shipment from our Vietnamese supplier hasn\'t arrived. Do you know what\'s holding it up?','W: I just got off the phone with them. Apparently, a customs inspection was extended, so they expect delivery by Friday instead.','M: That\'s going to push back our product launch. Should we notify the marketing team?','W: I\'d wait until tomorrow. They\'re going to confirm the new date in writing, and then we can give marketing accurate information.'],qs:[
+{q:'Why has the shipment been delayed?',o:['The supplier ran out of stock','A customs inspection took longer than expected','The shipping address was wrong','A truck broke down'],a:1,e:'女子說 a customs inspection was extended，即海關檢查延長。'},
+{q:'What does the woman suggest doing?',o:['Contacting another supplier','Canceling the product launch','Waiting for written confirmation before informing marketing','Requesting a refund'],a:2,e:'I\'d wait until tomorrow... confirm the new date in writing，等書面確認日期後再通知行銷部。'}]},
+{t:'L',p:'Part 4 簡短獨白',sc:['Attention passengers on Flight 208 to Osaka. Due to a mechanical inspection, boarding will be delayed by approximately forty minutes. We apologize for the inconvenience. Passengers with connecting flights are asked to visit the transfer desk near Gate 12, where agents will rebook you on the next available departure. In addition, meal vouchers are available at the information counter. Please keep your boarding passes with you.'],qs:[
+{q:'What should passengers with connecting flights do?',o:['Board immediately','Go to the transfer desk','Collect their luggage','Call the airline'],a:1,e:'visit the transfer desk near Gate 12 即前往轉機櫃檯。'},
+{q:'What is available at the information counter?',o:['Meal vouchers','Boarding passes','Hotel rooms','Refund forms'],a:0,e:'meal vouchers are available at the information counter。'}]},
+{t:'R',p:'Part 5 句子填空',pass:'',qs:[
+{q:'The merger will proceed ______ regulatory approval is granted by the end of the quarter.',o:['provided that','in case of','owing to','as to'],a:0,e:'後接完整子句，需連接詞。provided that = 只要、倘若。in case of / owing to / as to 後接名詞。'},
+{q:'Ms. Tanaka was commended for her ______ handling of the sensitive negotiations.',o:['discretion','discreet','discreetly','discretionary'],a:1,e:'空格修飾名詞 handling，用形容詞 discreet（謹慎的）。discretionary 意為「可自行裁量的」，語意不符。'},
+{q:'Only after the auditors ______ the records did the discrepancy become apparent.',o:['will review','had reviewed','reviewing','review'],a:1,e:'Only after 引導的子句動作先發生，主要子句用過去式 did，故用過去完成式 had reviewed。'},
+{q:'The new policy is intended to ______ productivity without compromising employee well-being.',o:['enhance','enhancement','enhancing','enhanced'],a:0,e:'to 後接原形動詞，enhance 意為提升。'},
+{q:'______ the unexpected surge in demand, the factory managed to meet all orders on time.',o:['Despite','Although','Because','Whereas'],a:0,e:'後接名詞片語 the unexpected surge，只能用介系詞 Despite。Although / Because / Whereas 後接子句。'},
+{q:'Employees are required to ______ with the updated safety regulations by March 1.',o:['comply','adhere','abide','obey'],a:0,e:'依搭配詞只有 comply with 成立；adhere to、abide by 介系詞不同；obey 為及物動詞，不接 with。'}]},
+{t:'R',p:'Part 7 閱讀理解',pass:'To: All Staff\nFrom: Daniel Ortiz, Facilities\nSubject: Parking lot resurfacing\n\nThe north parking lot will be closed for resurfacing from Monday, June 3, through Wednesday, June 5. During this period, employees are encouraged to use the south lot or take the shuttle that runs every 15 minutes from Elm Street Station. Those who must park on site due to mobility needs should contact my office by Friday to receive a temporary permit. Please note that the work may extend into Thursday should heavy rain interrupt the schedule.',qs:[
+{q:'What is the main purpose of the e-mail?',o:['To announce a new shuttle service','To inform staff of a temporary lot closure','To request volunteers for repairs','To explain a new parking fee'],a:1,e:'全文重點是北停車場暫時關閉並說明替代方案。shuttle 只是替代措施。'},
+{q:'What are employees with mobility needs asked to do?',o:['Use the shuttle','Park on the street','Request a temporary permit by Friday','Work from home'],a:2,e:'contact my office by Friday to receive a temporary permit。'},
+{q:'What is suggested about the schedule?',o:['It may be extended because of weather','It will end on Monday','It has been postponed','It includes weekend work'],a:0,e:'work may extend into Thursday should heavy rain interrupt，暗示天候不佳可能延長。'}]}
+];
+const sh=a=>{a=[...a];for(let n=a.length;n>1;){const j=Math.random()*n--|0;[a[n],a[j]]=[a[j],a[n]]}return a},pick=(a,n)=>sh(a).slice(0,n),rnd=a=>a[Math.random()*a.length|0],cap=s=>s[0].toUpperCase()+s.slice(1);
+const mq=(q,c,w,e)=>{const o=sh([c,...w]);return{q,o,a:o.indexOf(c),e}};
+const T=['the sales report','the budget proposal','the training session','the client contract','the product launch','the safety inspection','the annual conference','the office renovation','the software upgrade','the hiring plan'];
+const P2=[[x=>`When is ${x} due?`,'By the end of this week.',['Mr. Park is in charge of it.','In the main auditorium.'],'When 問時間，應回答期限；其餘選項回答人物與地點。'],
+[x=>`Who is responsible for ${x}?`,'The operations team is handling it.',['Before the end of the month.','About two hundred dollars.'],'Who 問負責人，回答團隊或人名。'],
+[x=>`Where will ${x} take place?`,'In the main conference room.',['Next Wednesday morning.','Ms. Chen approved it.'],'Where 問地點，回答場所。'],
+[x=>`Why was ${x} postponed?`,'Because the director is traveling.',['It starts at nine.','On the second floor.'],'Why 問原因，以 Because 回答。'],
+[x=>`Do you know if ${x} has been approved?`,'Yes, the director signed off yesterday.',['It\'s on the second floor.','I prefer the blue one.'],'間接問句詢問核准狀況，只有 A 直接回答。']];
+const S3=[['a delayed shipment','a customs inspection took longer than expected','wait for written confirmation'],['the cancelled client meeting','the client\'s flight was cancelled','reschedule it for next week'],['the broken projector','the power cable was damaged','borrow one from the training department'],['the budget shortfall','travel costs exceeded the estimate','postpone the purchase of new laptops'],['the server outage','a software update failed overnight','contact the vendor\'s support team'],['the missing invoice','it was sent to the wrong address','ask accounting to issue a duplicate'],['the low survey response','the form was too long','shorten the questionnaire and resend it'],['the parking shortage','construction blocked the north lot','arrange a shuttle service'],['the overbooked conference room','two teams reserved it by mistake','move one meeting to the cafeteria'],['the product defect','a supplier changed the materials','pause production until testing is done'],['the staff shortage','several employees resigned this month','hire temporary workers'],['the website complaints','the checkout page loads slowly','hire a consultant to redesign it'],['the late payment','the bank processed it slowly','call the client to confirm receipt']];
+const sq=(s,qs)=>[0,1,2].map(k=>mq(qs[k],cap(s[k]),pick(S3.filter(z=>z!==s),3).map(z=>cap(z[k])),'對照原文關鍵內容：'+s[k]+'。'));
+const P5=['The board has asked all department heads to ______ their budget requests by Friday.|submit|submission|submitting|submitted|0|ask ... to 後接原形動詞。','Revenue grew by ______ ten percent last quarter, exceeding forecasts.|nearly|near|nearness|nearest|0|副詞 nearly 修飾數字。','The CEO, ______ has led the firm for twenty years, will retire in December.|who|whom|whose|which|0|指人且在子句中作主詞，用 who。','Ms. Alvarez is the candidate ______ qualifications best match the job description.|whose|who|whom|that|0|後接名詞 qualifications，需所有格關代 whose。','Please keep the receipt, ______ you may be asked to provide proof of purchase.|since|so that|unless|whereas|0|since 表原因，語意通順。','The new regulations apply to all employees ______ of their rank.|regardless|regarding|regard|regardful|0|regardless of 意為「不論」。','______ the proposal was rejected, the team decided to revise it and apply again.|Although|Despite|Due to|Instead of|0|後接完整子句且語意讓步，用 Although。','The manager insisted that the report ______ before the audit.|be completed|is completed|was completed|completing|0|insist 表要求時，that 子句用（should）+原形動詞。','Had the company invested earlier, it ______ a larger market share today.|would have|will have|had had|has|0|與現在事實相反的倒裝假設，主句用 would + 原形。','The warranty is valid ______ the date of purchase.|from|since|during|while|0|valid from + 日期，表示自某日起生效。','Employees who work overtime are ______ to additional compensation.|entitled|eligible|qualified|permitted|0|be entitled to + 名詞；eligible 接 for。','The consultant\'s recommendations were both practical ______ cost-effective.|and|but|or|nor|0|both A and B 為固定搭配。','Neither the manager ______ the assistants were aware of the schedule change.|nor|or|and|but|0|neither ... nor 為固定搭配。','The company is considering ______ a branch office in Seoul.|opening|to open|open|opened|0|consider 後接動名詞。','Due to the heavy rain, the outdoor event has been ______ until further notice.|postponed|precluded|prevented|proceeded|0|postpone 意為延期。','The project was completed ______ budget, which impressed the investors.|under|toward|among|upon|0|under budget 為慣用語，表示低於預算。','Our sales team consistently ______ its quarterly targets.|exceeds|exceed|to exceed|exceeding|0|team 視為單數主詞，現在簡單式用 exceeds。','The seminar will be ______ useful to those who manage large teams.|particularly|particular|particularize|particulars|0|副詞修飾形容詞 useful。','All visitors must wear identification badges at all times on the ______.|premises|premise|premised|premising|0|on the premises（在場所內）固定用複數。','She was promoted ______ her outstanding performance in the Asian market.|owing to|in spite of|as well as|rather than|0|owing to 表原因，後接名詞片語。','The proposal needs to be revised, ______ it contains several inaccuracies.|for|nor|so|or|0|for 作連接詞，表附帶原因。','Once the new system ______, all employees will receive login instructions.|is installed|installs|will install|has installing|0|時間副詞子句用現在式代替未來，且 system 被安裝，用被動。','The firm\'s reputation for reliability has ______ it a loyal customer base.|earned|raised|risen|arisen|0|earn sb sth 表示使某人贏得某物。','Participants are encouraged to submit questions in advance ______ the session runs smoothly.|so that|even if|as if|in case of|0|so that 表目的。'];
+const EV=['a safety training workshop','a quarterly town hall meeting','a software demonstration','a client appreciation dinner','a fire drill','a performance review seminar','a team-building retreat','a product launch rehearsal'],WH=['Daniel Ortiz, Facilities','Priya Nair, Human Resources','Marcus Lee, Operations','Elena Rossi, Finance'],WH2=['Ms. Chen','Mr. Alvarez','the HR office','Ms. Okafor','the front desk'],DL=['Friday','next Monday','Wednesday at noon','the end of this week','June 10'],DAY=['Monday, June 3','Tuesday, July 9','Thursday, March 14','Friday, May 17','Wednesday, August 21'],PL=['the main auditorium','Conference Room B','the third-floor cafeteria','the Elm Street branch','the training center'];
+function gen(){
+ const o=[],c2=[];T.forEach(x=>P2.forEach(p=>c2.push([x,p])));
+ o.push(...sh([...pick(c2,21).map(([x,[f,c,w,e]])=>{const r=mq('請聽問句並選出最適當的回應',c,w,e);return{t:'L',p:'Part 2 應答問題',sc:[f(x),...r.o.map((v,k)=>'ABC'[k]+'. '+v)],qs:[{q:r.q,o:['A','B','C'],a:r.a,e:r.e}]}}),...D.slice(0,4)]));
+ const q3=['What are the speakers discussing?','What caused the problem?','What does the woman suggest doing?'],q4=['What is the talk mainly about?','What caused the problem?','What will the company do?'];
+ sh(S3).forEach(s=>o.push({t:'L',p:'Part 3 簡短對話',sc:[`M: Hi Karen, have you heard about ${s[0]}?`,`W: Yes. I just learned that ${s[1]}.`,'M: What do you think we should do?',`W: I suggest we ${s[2]}, and then update the whole team.`],qs:sq(s,q3)}));
+ pick(S3,10).forEach(s=>o.push({t:'L',p:'Part 4 簡短獨白',sc:[`Good morning, everyone. I'd like to talk about ${s[0]}. As some of you know, ${s[1]}. To address this, we will ${s[2]}. Please speak to your supervisor if you have any questions.`],qs:sq(s,q4)}));
+ o.push({t:'R',p:'Part 5 句子填空',pass:'',qs:sh([...D[6].qs.map(q=>mq(q.q,q.o[q.a],q.o.filter((_,k)=>k!=q.a),q.e)),...P5.map(r=>{const [q,a,b,c,d,n,e]=r.split('|'),x=[a,b,c,d];return mq(q,x[n],x.filter((_,k)=>k!=n),e)})])});
+ const ps=[D[7]];
+ for(let n=0;n<17;n++){const ev=EV[n%8],day=rnd(DAY),pl=rnd(PL),wh=rnd(WH),w2=rnd(WH2),dl=rnd(DL),od=()=>rnd(DL.filter(z=>z!==dl)),ow=()=>rnd(WH2.filter(z=>z!==w2));
+  ps.push({t:'R',p:'Part 7 閱讀理解',pass:`To: All Staff\nFrom: ${wh}\nSubject: ${cap(ev)}\n\nWe are pleased to announce that ${ev} will take place on ${day} in ${pl}. Attendance is expected for all employees. Anyone who is unable to attend should notify ${w2} by ${dl}. Light refreshments will be provided.`,qs:[mq('What is the purpose of the notice?','To announce '+ev,pick(EV.filter(z=>z!==ev),3).map(z=>'To announce '+z),'主旨在主旨欄與首句：宣布 '+ev+'。'),mq('Where will the event be held?',cap(pl),pick(PL.filter(z=>z!==pl),3).map(cap),'第一段 in '+pl+'。'),mq('What are employees who cannot attend asked to do?',`Notify ${w2} by ${dl}`,[`Notify ${w2} by ${od()}`,`Notify ${ow()} by ${dl}`,`Notify ${ow()} by ${od()}`],`原文：notify ${w2} by ${dl}。`)]})}
+ o.push(...sh(ps));return o;
+}
+
+let S=[],i=0,ans=[],mode='all',played=0,voices=[];
+const $=id=>document.getElementById(id);
+const store={get(){try{return JSON.parse(localStorage.getItem('t900')||'{}')}catch(e){return{}}},set(v){try{localStorage.setItem('t900',JSON.stringify(v))}catch(e){}}};
+function build(){
+ const st=store.get();let w=st.wrong;if(!w||Array.isArray(w))w={};
+ if(mode==='W')S=Object.entries(w).map(([id,v])=>({it:v.it,q:v.q,id}));
+ else{S=[];gen().forEach(it=>it.qs.forEach(q=>{if(mode==='L'&&it.t!=='L'||mode==='R'&&it.t!=='R')return;S.push({it,q,id:(it.sc?it.sc.join(''):it.pass)+q.q})}));
+  if(mode==='Q'){const k=new Set(pick(S,20));S=S.filter(x=>k.has(x))}}
+ i=0;ans=[];render();
+}
+function tabs(){const m={all:'正式模擬',Q:'快速20題',L:'聽力',R:'閱讀',W:'錯題複習'};
+ $('tabs').innerHTML=Object.keys(m).map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${m[k]}</button>`).join('');
+ $('tabs').onclick=e=>{if(e.target.dataset.m){mode=e.target.dataset.m;build()}};}
+function speak(lines,rate){
+ speechSynthesis.cancel();
+ const en=voices.filter(v=>/^en/i.test(v.lang));
+ lines.forEach((l,k)=>{
+  const f=/^W:/.test(l),m=/^M:/.test(l);
+  const u=new SpeechSynthesisUtterance(l.replace(/^[MW]:\s*/,''));
+  u.lang='en-US';u.rate=rate;
+  const pool=en.filter(v=>/US/.test(v.lang));
+  if(pool.length)u.voice=pool[(f?1:0)%pool.length];
+  if(f)u.pitch=1.2;if(m)u.pitch=.85;
+  speechSynthesis.speak(u);
+ });
+}
+function render(){
+ tabs();
+ const main=$('main');
+ if(!S.length){main.innerHTML='<div class="card">目前沒有題目（錯題複習需要先答錯題目）。</div>';$('pb').style.width='0';$('pi').textContent='';$('sc').textContent='';return;}
+ if(i>=S.length)return result();
+ const {it,q,id}=S[i],a=ans[i],done=a!==undefined,L=it.t==='L';
+ $('pb').style.width=(i/S.length*100)+'%';
+ $('pi').textContent=`第 ${i+1} / ${S.length} 題`;
+ const right=ans.filter((v,k)=>v===S[k].q.a).length;$('sc').textContent=`答對 ${right} / ${ans.length}`;
+ const showSc=L&&(done||false);
+ let h=`<div class="card"><span class="tag">${it.p}</span>`;
+ if(L)h+=`<div class="aud"><button class="btn p" id="pl">▶ 播放音檔</button><button class="btn" id="st">■ 停止</button><select id="rt"><option value=".8">慢速 0.8x</option><option value=".95" selected>正常</option><option value="1.1">快速 1.1x</option></select></div><div class="hint" style="margin-bottom:8px">${speechSynthesis?'使用瀏覽器語音朗讀（英語），作答後才顯示原文。':'此瀏覽器不支援語音。'}</div>`;
+ else if(it.pass)h+=`<div class="pass">${it.pass}</div>`;
+ h+=`<p class="q">${q.q}</p>`;
+ q.o.forEach((o,k)=>{const lab='ABCD'[k];const txt=(L&&it.p.startsWith('Part 2'))?`(${lab})`:`(${lab}) ${o}`;
+  let c='opt';if(done){if(k===q.a)c+=' ok';else if(k===a)c+=' no';}
+  h+=`<button class="${c}" data-k="${k}" ${done?'disabled':''}>${txt}</button>`;});
+ if(done){h+=`<div class="ex"><b>${a===q.a?'✅ 正確':'❌ 答錯了，正解 ('+'ABCD'[q.a]+')'}</b>\n${q.e}`;
+  if(L)h+=`\n\n📝 原文：\n${it.sc.join('\n')}`;
+  h+='</div>';}
+ h+='</div><div class="row"><button class="btn" id="pv" '+(i?'':'disabled')+'>← 上一題</button><button class="btn p" id="nx" '+(done?'':'disabled')+'>'+(i===S.length-1?'完成':'下一題 →')+'</button></div>';
+ main.innerHTML=h;
+ main.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[i]=+b.dataset.k;speechSynthesis.cancel();
+  const st=store.get();let w=st.wrong;if(!w||Array.isArray(w))w={};
+  if(ans[i]===q.a)delete w[id];else w[id]={it:{t:it.t,p:it.p,pass:it.pass,sc:it.sc},q};
+  st.wrong=w;store.set(st);render();});
+ $('nx').onclick=()=>{speechSynthesis.cancel();i++;render();window.scrollTo(0,0)};
+ $('pv').onclick=()=>{speechSynthesis.cancel();i--;render()};
+ if(L){$('pl').onclick=()=>speak(it.sc,+$('rt').value);$('st').onclick=()=>speechSynthesis.cancel();}
+}
+function result(){
+ $('pb').style.width='100%';
+ const n=ans.filter((v,k)=>v===S[k].q.a).length,pc=Math.round(n/S.length*100);
+ const sec=t=>{const x=S.map((s,k)=>[s,k]).filter(([s])=>s.it.t===t);return x.length?`${x.filter(([s,k])=>ans[k]===s.q.a).length} / ${x.length}`:'—'};
+ const st=store.get();st.best=Math.max(st.best||0,pc);store.set(st);
+ $('main').innerHTML=`<div class="card"><div class="big">${pc}%</div><p style="text-align:center">答對 ${n} / ${S.length} 題　歷史最佳 ${st.best}%</p>
+ <p>🎧 聽力：${sec('L')}　📖 閱讀：${sec('R')}</p>
+ <p class="hint">目標：900 分約需聽力、閱讀各答對 85–90% 以上。建議把錯題用「錯題複習」再練一次。</p>
+ <div class="row"><button class="btn" id="rv">重新開始</button><button class="btn p" id="wr">複習錯題</button></div></div>`;
+ $('rv').onclick=build;$('wr').onclick=()=>{mode='W';build()};
+}
+$('th').onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()==='#12151d';r.dataset.theme=d?'light':'dark'};
+if('speechSynthesis' in window){const gv=()=>voices=speechSynthesis.getVoices();gv();speechSynthesis.onvoiceschanged=gv;}
+build();
+</script>
+</body>
+</html>
